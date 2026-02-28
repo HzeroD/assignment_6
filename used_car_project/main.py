@@ -26,9 +26,14 @@ class CarFeatures(BaseModel):
 
 # model = joblib.load("./data/random_fores_model.pkl")
 try: 
-    model = joblib.load("./data/random_forest_model.pkl")
+    model = joblib.load("../data/random_forest_model.pkl")
 except Exception as e:
     raise RuntimeError(f"Error loading model: {e}")
+
+
+@app.get("/")
+def home():
+   return {"WELCOME TO OUR USED CAR PREDICTION APP"}
 
 
 @app.post("/predict")
@@ -54,6 +59,6 @@ def predict_price(features: CarFeatures):
         logging.error(f"Error making prediction: {e}")
         return {"error": "An error occurred while making the prediction"}
 
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to the Used Car Price Prediction API"}
+# @app.get("/")
+# def read_root():
+#     return {"message": "Welcome to the Used Car Price Prediction API"}
