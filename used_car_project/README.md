@@ -20,6 +20,8 @@ uv run main.py
 
 # docker 
 
+(current dir should be root of this project in terminal)
+
 `docker build -t used_car_price_estimation_model:v1 .`
 
 `docker run -p 8000:8000 used_car_price_estimation_model:v1`
