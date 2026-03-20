@@ -40,7 +40,7 @@ class ChurnFeatures(pydantic.BaseModel):
 
 
 model = joblib.load('./data/rfc_best_model.pkl')
-encoder_ohe = 0
+ohe = 0
 
 with open('./data/encoder_ohe.pkl', 'rb') as encoder:
     ohe = dill.load(encoder)
@@ -59,10 +59,11 @@ def predict(features: ChurnFeatures):
     df = pd.DataFrame([features.model_dump()])
 
     df_object = df.select_dtypes(include='object')
-    print
+    
     object_features = df_object.columns.tolist()
     df_num = df.select_dtypes(include='number')
-
+    
+    print(ohe)
     encoded_arr = ohe.transform(df_object).toarray()
     temp = ohe.categories_[-1]
     labels = np.array(ohe.categories_[:-1]).ravel()
@@ -70,8 +71,11 @@ def predict(features: ChurnFeatures):
     feature_labels = np.concatenate((labels, temp))
     df_encoded = pd.DataFrame(encoded_arr, columns=[f"{col}_encoded" for col in feature_labels])
     print(df_encoded.iloc[:, 18:24])
-    prediction = model.predict(pd.concat([df_num, df_encoded], axis=1))
     
-    return {f"Prediction: {prediction}"}
+    # X = pd.concat([df_num, df_encoded], axis=1)
+    prediction = model.predict(pd.concat([df_num, df_encoded], axis=1))
+    proba = model.predict_proba(pd.concat([df_num, df_encoded], axis=1))
+    
+    return {f"Prediction: {prediction}  Probability: {proba}"}
 
 
