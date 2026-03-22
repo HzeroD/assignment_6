@@ -1,11 +1,7 @@
 ## Overview
     The goal of the work in this folder is to build a basic machine learning pipeline that spans from data ingestion, preprocessing and model training to a containerized docker application which gives a prediction based on sent data. The dataset used was the Telco Customer Churn (Kaggle/IBM) data set "https://www.kaggle.com/datasets/blastchar/telco-customer-churn", and the target feature is 'Churn', which is a binary feature with "Yes" and "No" values. 
 
-**The Data**
-    Shape: 7043 rows and 20 columns(including 'Churn')
-    NA Values: There were no missing values in the dataset
-    Column Types: There were 16 categorical features(including 'Churn') and four numeric type features
-    Preprocessing: scikit-learn's OneHotEncoder() was used to encode the categorical features
+
 
 **The Models**
     Four scikit-learn models were used to predict churn rates:
