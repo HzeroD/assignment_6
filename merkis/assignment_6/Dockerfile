@@ -9,7 +9,7 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir .
 
 COPY main.py .
-COPY ./data/rfc_best_model.pkl ./data/rfc_best_model.pkl
+COPY ./data/best_model.pkl ./data/best_model.pkl
 
 COPY ./data/encoder_ohe.pkl ./data/encoder_ohe.pkl
 
