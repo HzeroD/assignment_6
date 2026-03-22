@@ -23,11 +23,14 @@ app = FastAPI()
 #  "PaymentMethod": "Mailed check"}'
 
 class ChurnFeatures(pydantic.BaseModel):
-    SeniorCitizen: int
     tenure: int
     MonthlyCharges: float
     TotalCharges: float
-    MultipleLines: str
+    gender: str
+    Partner: str
+    Dependents: str
+    PhoneService: str
+    MultipleLines: object
     InternetService: str
     OnlineSecurity: str
     OnlineBackup: str
@@ -36,6 +39,7 @@ class ChurnFeatures(pydantic.BaseModel):
     StreamingTV: str
     StreamingMovies: str
     Contract: str
+    PaperlessBilling: str
     PaymentMethod: str
 
 
@@ -65,11 +69,13 @@ def predict(features: ChurnFeatures):
     
     print(ohe)
     encoded_arr = ohe.transform(df_object).toarray()
-    temp = ohe.categories_[-1]
-    labels = np.array(ohe.categories_[:-1]).ravel()
-    # labels = np.array(ohe.categories_).ravel()
-    feature_labels = np.concatenate((labels, temp))
-    df_encoded = pd.DataFrame(encoded_arr, columns=[f"{col}_encoded" for col in feature_labels])
+    print(encoded_arr)
+    # temp = ohe.categories_[-1]
+    # labels = np.array(ohe.categories_[:-1]).ravel()
+    # # labels = np.array(ohe.categories_).ravel()
+    # feature_labels = np.concatenate((labels, temp))
+    # print(ohe.get_feature_names_out())
+    df_encoded = pd.DataFrame(encoded_arr, columns=[f"{col}" for col in ohe.get_feature_names_out()])
     print(df_encoded.iloc[:, 18:24])
     
     # X = pd.concat([df_num, df_encoded], axis=1)
