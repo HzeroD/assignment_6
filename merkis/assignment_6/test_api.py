@@ -5,27 +5,32 @@ import random
 
 URL = "http://127.0.0.1:8000/predict"
 
-dataset = {
-    "SeniorCitizen": random.choice([0, 1]),
-    "tenure": random.randint(0,72),
-    "MonthlyCharges": round(random.uniform(18.25, 118.75), 2),
-    "TotalCharges": round(random.uniform(0.0, 8684.8), 2),
-    "MultipleLines": random.choice(['No phone service', 'No', 'Yes']),
-    "InternetService": random.choice(['No phone service', 'No', 'Yes']),
-    "OnlineSecurity": random.choice(['No phone service', 'No', 'Yes']),
-    "OnlineBackup": random.choice(['Yes', 'No', 'No internet service']),
-    "DeviceProtection": random.choice(['No', 'Yes', 'No internet service']),
-    "TechSupport": random.choice(['No', 'Yes', 'No internet service']),
-    "StreamingTV": random.choice(['No', 'Yes', 'No internet service']),
-    "StreamingMovies": random.choice(['No', 'Yes', 'No internet service']),
-    "Contract": random.choice(['Month-to-month', 'One year', 'Two year']),
-    "PaymentMethod": random.choice(['Electronic check', 'Mailed check','Bank transfer (automatic)','Credit card (automatic)']),
-}
+def generate_sample_data():
+        return {
+                "tenure": random.randint(0,72),
+                "MonthlyCharges": round(random.uniform(18.25, 118.75), 2),
+                "TotalCharges": round(random.uniform(0.0, 8684.8), 2),
+                "gender": random.choice(["Male", "Female"]),
+                "Partner": random.choice(["Yes", "No"]),
+                "Dependents": random.choice(["Yes", "No"]),
+                "PhoneService": random.choice(["Yes", "No"]),
+                "MultipleLines": random.choice(['No phone service', 'No', 'Yes']),
+                "InternetService": random.choice(['No phone service', 'No', 'Yes']),
+                "OnlineSecurity": random.choice(['No phone service', 'No', 'Yes']),
+                "OnlineBackup": random.choice(['Yes', 'No', 'No internet service']),
+                "DeviceProtection": random.choice(['No', 'Yes', 'No internet service']),
+                "TechSupport": random.choice(['No', 'Yes', 'No internet service']),
+                "StreamingTV": random.choice(['No', 'Yes', 'No internet service']),
+                "StreamingMovies": random.choice(['No', 'Yes', 'No internet service']),
+                "Contract": random.choice(['Month-to-month', 'One year', 'Two year']),
+                "PaperlessBilling": random.choice(["Yes", "No"]),
+                "PaymentMethod": random.choice(['Electronic check', 'Mailed check','Bank transfer (automatic)','Credit card (automatic)']),
+            }
 
-print(random.choice(["Yes", "No"]))
 
-def make_request(request_id):
-    data = dataset
+def make_request(request_id, data=None, URL=URL):
+    if data == None:
+        data = generate_sample_data()
 
     try:
         response = requests.post(URL, json=data)
@@ -74,12 +79,16 @@ def run_concurrent_requests(num_requests=100):
 
     return results
 
-def batch_post(n_customers):
+def batch_post(n_customers=50):
     batch_lst = []
     for i in range(n_customers):
-        batch_lst.append(dataset)
+        batch_lst.append(generate_sample_data())
+
+    response = requests.post("http://127.0.0.1:8000/predict_batch", json=batch_lst)
+    return response.json()
 
 
 if __name__ == "__main__":
     # results = run_concurrent_requests(10)
     # print(results[7])
+    print(batch_post())
