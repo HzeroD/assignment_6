@@ -47,7 +47,7 @@ model = joblib.load('./data/best_model.pkl')
 ohe = 0
 
 with open('./data/encoder_ohe.pkl', 'rb') as encoder:
-    ohe = dill.load(encoder)
+    ohe = joblib.load(encoder)
 
 
 
