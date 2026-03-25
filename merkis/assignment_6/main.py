@@ -43,7 +43,7 @@ class ChurnFeatures(pydantic.BaseModel):
     PaymentMethod: str
 
 
-model = joblib.load('./data/best_model.pkl')
+model = joblib.load('./data/rfc_best_model.pkl')
 ohe = 0
 
 with open('./data/encoder_ohe.pkl', 'rb') as encoder:
@@ -77,11 +77,10 @@ def predict(features: ChurnFeatures):
     df_encoded = pd.DataFrame(encoded_arr, columns=[f"{col}" for col in ohe.get_feature_names_out()])
     print(df_encoded.iloc[:, 18:24])
     
-    X = pd.concat([df_num, df_encoded], axis=1)
-    prediction = model.predict(X)
-    proba = model.predict_proba(X)[0][0] if prediction == "No" else model.predict_proba(X)[0][1]
+    prediction = model.predict(pd.concat([df_num, df_encoded], axis=1))
+    proba = model.predict_proba(pd.concat([df_num, df_encoded], axis=1))
     
-    return {f"Prediction: {prediction}  Probability: {round(proba, 2)}"}
+    return {f"Prediction: {prediction}  Probability: {proba}"}
 
 
 
@@ -103,7 +102,7 @@ def predict_batch(batch: list[ChurnFeatures]):
         prediction = model.predict(X)
         proba = model.predict_proba(X)[0][0] if prediction == "No" else model.predict_proba(X)[0][1]
 
-        predictions.append([prediction[0], round(proba, 2)])
+        predictions.append([prediction[0], proba])
     
     return predictions
 
